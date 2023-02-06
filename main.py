@@ -19,8 +19,6 @@ user = userclass.User("")
 
 
 def main():
-    clean_noise()
-
     global settings
     settings = get_settings()
     update_engine_settings(settings)
@@ -31,12 +29,7 @@ def main():
 
     while True:
         exec_cmd()
-    
-    
-def clean_noise():
-    with mic as source:
-        r.adjust_for_ambient_noise(source)
-    
+
     
 def get_user() -> userclass.User:
     if os.path.exists(dt.USER):
@@ -96,7 +89,8 @@ def say(text: str):
 def listen(need_back: bool) -> str:
     with mic as source:
         while True:
-            audio = r.listen(source)
+            r.adjust_for_ambient_noise(source, duration=2)
+            audio = r.listen(source, phrase_time_limit=3)
             try:
                 f = r.recognize_google(audio, language="ru-RU").lower()
                 return f

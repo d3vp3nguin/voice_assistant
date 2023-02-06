@@ -12,3 +12,8 @@ This project import moduls:
 - datetime
 - os
 - sys
+
+For PyCharm:
+pip install pyttsx3
+pip install SpeechRecognition
+pip install PyAudio
