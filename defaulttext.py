@@ -1,5 +1,5 @@
-SETTINGS = 'settings.bin'
-USER = 'user.bin'
+SETTINGS = 'settings.dt'
+USER = 'user.dt'
 
 CMDS = {
     'commands': {
