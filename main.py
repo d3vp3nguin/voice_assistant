@@ -4,6 +4,7 @@ import pickle
 import datetime
 import os.path
 import sys
+import threading
 
 import userclass
 import settingsclass
@@ -19,6 +20,7 @@ user = userclass.User("")
 
 
 def main():
+
     global settings
     settings = get_settings()
     update_engine_settings(settings)
@@ -29,6 +31,12 @@ def main():
 
     while True:
         exec_cmd()
+
+
+def thread(func):
+    def wrapper(*args, **kwargs):
+        threading.Thread(target=func, args=args, kwargs=kwargs).start()
+    return wrapper
 
     
 def get_user() -> userclass.User:
@@ -80,7 +88,10 @@ def check_agree() -> bool:
     return False
 
 
+@thread
 def say(text: str):
+    if engine.inLoop:
+        engine.endLoop()
     engine.say(text)
     engine.runAndWait()
     engine.stop()
@@ -106,7 +117,7 @@ def time_cmd():
 
 def end_cmd():
     say(dt.GOODBYE + user.username)
-    sys.exit()
+    os._exit(0)
 
 
 def exec_cmd():
